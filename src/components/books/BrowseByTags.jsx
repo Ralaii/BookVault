@@ -14,7 +14,7 @@ function BrowseByTags({ selectedTag, onSelectTag }) {
       <div>
         <h2 className="flex flex-col mb-2 font-semibold">Browse by Genre</h2>
       </div>
-      <div className="flex flex-wrap gap-2 py-2 w-full max-w-xl">
+      <div className="flex flex-wrap gap-2 py-2 w-full max-w-5xl">
         {tags?.map((tag) => (
           <button 
             key={tag.id}
