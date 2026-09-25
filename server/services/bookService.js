@@ -1,27 +1,61 @@
 import supabase from "../config/supabase.js"
 
-export const fetchBook = async ({ tag, limit = 10, status = "published", page = 0 } = {}) => {
+export const fetchBook = async ({ tags, limit = 10, status = "published", page = 0 } = {}) => {
   try {
+    
     const from = page * limit;
     const to = from + limit - 1;
+
+    let bookIds = null;
    
-    const selectQuery = tag
-    ? "*, book_tags!inner(tags!inner(name))"
-    : "*, book_tags(tags(name))";
+    if (tags && tags.length > 0) {
+      const { data: taggedBooks, error: tagError } = await supabase
+        .from("book_tags")
+        .select("book_id, tags!inner(name)")
+        .in('tags.name', tags)
+
+      if (tagError) {
+        throw new Error(tagError.message);
+      }
+
+      bookIds = taggedBooks.map(bt => bt.book_id)
+    
+      if (bookIds.length === 0) return { books: [], totalPages: 0}
+    }
 
     let query = supabase
       .from('books')
-      .select(selectQuery)
+      .select('*', { count: 'exact'})
       .eq('status', status)
       .order('created_at', {ascending: false})
       .range(from, to)
 
-      if (tag) query = query.eq("book_tags.tags.name", tag)
+      if (bookIds) query = query.in('id', bookIds)
 
-      const { data, error } = await query;
+      const { data: books, error, count } = await query;
+
       if (error) throw new Error(error.message);
 
-      return data;
+      const ids = books.map(book => book.id);
+
+      const { data: bookTags, error: bookTagsError } = await supabase
+        .from('book_tags')
+        .select('book_id, tags(name)')
+        .in('book_id', ids)
+
+      if (bookTagsError) throw new Error(bookTagsError.message);
+
+      const bookWithTags = books.map(book => ({
+        ...book,
+        tags: bookTags
+          .filter(bt => bt.book_id === book.id)
+          .map(bt => bt.tags.name)
+      }))
+
+      return {
+        books: bookWithTags,
+        totalPages: Math.ceil(count / limit)
+      };
     
   } catch (error) {
       throw new Error(error.message);
@@ -61,8 +95,21 @@ export const fetchBanner = async () => {
     return fetchBookRankings(limit);
     
   } catch (error) {
-    console.log(error.message);
     throw new Error(error.message);
+  }
+}
+
+export const fetchNewRelease = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('books')
+      .select('*')
+      .order('created_at', {ascending: false})
+
+    if (error) throw new Error(error.message);
+    return data;
+  } catch (error) {
+    throw new Error(error.message)
   }
 }
 
