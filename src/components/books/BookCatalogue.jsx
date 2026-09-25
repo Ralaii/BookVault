@@ -2,6 +2,7 @@ import { useState } from "react";
 import useBook from "../../hooks/Book/useBook";
 import BookPagination from "../general/BookPagination";
 import BookCard from "./BookCard";
+import { Link } from "react-router-dom";
 
 function BookCatalogue() {
   const [ page, setPage ] = useState(0)
@@ -21,7 +22,12 @@ function BookCatalogue() {
         {/* LEFT SECTION OF BOOK */}
         <div className="flex flex-col gap-4">
           {books?.books?.slice(0, half).map(book => (
-            <BookCard key={book.id} book={book}/>
+            <Link 
+              key={book.id}
+              to={`/page/book/${book.id}`}
+            >
+              <BookCard book={book}/>
+            </Link>
           ))}
         </div>
         

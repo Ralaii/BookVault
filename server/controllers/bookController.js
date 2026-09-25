@@ -1,4 +1,4 @@
-import { fetchBanner, fetchBook, fetchBookRankings, fetchNewRelease, fetchTags } from "../services/bookService.js"
+import { bookPageService, fetchBanner, fetchBook, fetchBookRankings, fetchNewRelease, fetchTags } from "../services/bookService.js"
 import { withCache } from "../utilities/cache.js";
 
 export const getBookController = async (req, res) => {
@@ -54,6 +54,22 @@ export const bookNewReleaseController = async (req, res) => {
     res.status(200).json({
       success: true,
       newBooks : data
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const bookPageController = async (req, res) => {
+  const id = req.params.id
+  try {
+    const data = await bookPageService(id)
+    res.status(200).json({
+      success: true,
+      data
     })
   } catch (error) {
     res.status(500).json({

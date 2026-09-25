@@ -11,11 +11,16 @@ export const fetchTag = async () => {
 }
 
 export const fetchBook = async ({page, tags}) => {
-  const res = await api.get('/api/books/books', { params: {page, tags}});
+  const res = await api.get('/api/books/', { params: {page, tags}});
   return res.data.book
 }
 
 export const fetchNewBook = async () => {
   const res = await api.get('/api/books/new')
   return res.data.newBooks;
+}
+
+export const fetchBookPage = async (id) => {
+  const res = await api.get(`/api/books/${id}`)
+  return res
 }

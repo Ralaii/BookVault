@@ -1,84 +1,35 @@
 import supabase from "../config/supabase.js"
+import { getBookById, getBookIdsByTag, getBookRankings, getBooksWithTag } from "../repository/book.js";
 
 export const fetchBook = async ({ tags, limit = 10, status = "published", page = 0 } = {}) => {
-  try {
-    
-    const from = page * limit;
-    const to = from + limit - 1;
+  const MAX_LIMIT = 100;
+  const safeLimit = Math.min(limit, MAX_LIMIT)
+  const safePage = Math.max(page, 0)
+  const from = safePage * safeLimit;
+  const to = from + safeLimit - 1;
 
-    let bookIds = null;
-   
-    if (tags && tags.length > 0) {
-      const { data: taggedBooks, error: tagError } = await supabase
-        .from("book_tags")
-        .select("book_id, tags!inner(name)")
-        .in('tags.name', tags)
+  let bookIds = null;
+  
+  if (tags && tags.length > 0) {
+    bookIds = await getBookIdsByTag(tags);
+    if (bookIds.length === 0) return { books: [], totalPages: 0}
+  }
 
-      if (tagError) {
-        throw new Error(tagError.message);
-      }
+  const { data: books, count } = await getBooksWithTag({from, to, status, bookIds });
+  const booksWithTags = books.map(({book_tags, ...book}) => ({
+    ...book,
+    tags: book_tags.map(bt => bt.tags.name)
+  }))
 
-      bookIds = taggedBooks.map(bt => bt.book_id)
-    
-      if (bookIds.length === 0) return { books: [], totalPages: 0}
-    }
-
-    let query = supabase
-      .from('books')
-      .select('*', { count: 'exact'})
-      .eq('status', status)
-      .order('created_at', {ascending: false})
-      .range(from, to)
-
-      if (bookIds) query = query.in('id', bookIds)
-
-      const { data: books, error, count } = await query;
-
-      if (error) throw new Error(error.message);
-
-      const ids = books.map(book => book.id);
-
-      const { data: bookTags, error: bookTagsError } = await supabase
-        .from('book_tags')
-        .select('book_id, tags(name)')
-        .in('book_id', ids)
-
-      if (bookTagsError) throw new Error(bookTagsError.message);
-
-      const bookWithTags = books.map(book => ({
-        ...book,
-        tags: bookTags
-          .filter(bt => bt.book_id === book.id)
-          .map(bt => bt.tags.name)
-      }))
-
-      return {
-        books: bookWithTags,
-        totalPages: Math.ceil(count / limit)
-      };
-    
-  } catch (error) {
-      throw new Error(error.message);
+  return {
+    books: booksWithTags,
+    totalPages: Math.ceil(count / safeLimit)
   }
 }
 
 export const fetchBookRankings = async (limit = 50) => {
-  try {
-  const { data, error} = await supabase
-    .from("book_rankings")
-    .select("*, books(title, cover_image)")
-    .order("rank", { ascending: true })
-    .limit(limit)
-
-  if (error) {
-    throw new Error(error.message)
-  }
-
+  const data = await getBookRankings(limit);
   return data;
-
-  } catch (error) {
-    throw new Error(`Failed to fetch Book Rankings ${error.message}`);
-  }
 }
 
 export const fetchBanner = async () => {
@@ -127,3 +78,13 @@ export const fetchTags = async () => {
     throw new Error(error.message)
   }
 }
+
+export const bookPageService = async (id) => {
+  const result = await getBookById(id);
+  const { book_authors, ...page} = result.data
+  const author = book_authors[0]
+  page.author = author.authors.users.username;
+  page.bio = author.authors.bio
+  return page;
+};
+  
