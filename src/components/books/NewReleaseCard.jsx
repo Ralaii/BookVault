@@ -1,7 +1,7 @@
 function NewReleaseCard({book}) {
   return (
     <div className="flex flex-col gap-1 cursor-pointer group">
-      <div className="aspect-3/4 w-full overflow-hidden rounded-lg">
+      <div className="aspect-[3/4] w-full overflow-hidden rounded-lg">
         <img 
         src={book.cover_image} 
         alt={book.title}

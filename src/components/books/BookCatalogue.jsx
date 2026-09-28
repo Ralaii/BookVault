@@ -3,6 +3,7 @@ import useBook from "../../hooks/Book/useBook";
 import BookPagination from "../general/BookPagination";
 import BookCard from "./BookCard";
 import { Link } from "react-router-dom";
+import BannerCatalogueSkeleton from "../skeletons/BannerCatalogueSkeleton";
 
 function BookCatalogue() {
   const [ page, setPage ] = useState(0)
@@ -11,7 +12,7 @@ function BookCatalogue() {
     booksLoading,
     booksError
   } = useBook(page)
-  if (booksLoading) return <div>Loading...</div>
+  if (booksLoading) return <BannerCatalogueSkeleton/>
   if (booksError) return <div>Something went wrong...</div>
 
   const half = Math.ceil(books?.books?.length / 2)
