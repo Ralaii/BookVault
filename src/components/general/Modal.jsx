@@ -2,7 +2,7 @@ import { BsX } from "react-icons/bs";
 
 function Modal({ children, onClose }) {
   return(
-    <div className="fixed inset-0 flex flex-col justify-center items-center bg-black/50">
+    <div className="fixed inset-0 flex flex-col justify-center items-center bg-black/50 z-900">
       <div className="bg-zinc-800 rounded-lg w-96 flex relative p-4">
         <button
           onClick={onClose}

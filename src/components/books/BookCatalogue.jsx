@@ -35,7 +35,12 @@ function BookCatalogue() {
         {/* RIGHT SECTION OF BOOK */}
         <div className="flex flex-col gap-4">
           {books?.books?.slice(half).map(book => (
-            <BookCard key={book.id} book={book}/>
+            <Link 
+              key={book.id}
+              to={`/page/book/${book.id}`}
+            >
+              <BookCard key={book.id} book={book}/>
+            </Link>
           ))}
         </div>
       </div>

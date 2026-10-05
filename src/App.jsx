@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import Home from "./pages/Home";
+import BookDetailPage from "./pages/BookDetailPage";
 
 
 function App() {
@@ -14,6 +15,15 @@ function App() {
           <MainLayout>
             <Home/>
           </MainLayout>}
+        />
+
+        <Route
+          path="/page/book/:id"
+          element={
+            <MainLayout>
+              <BookDetailPage/>
+            </MainLayout>
+          }
         />
 
       </Routes>

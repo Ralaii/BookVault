@@ -5,10 +5,8 @@ import { loginController, logoutController, registerController } from "../contro
 import { authenticate } from "../middleware/authenticate.js";
 
 const authRoute = express.Router();
-
 authRoute.post("/register", validate(registerSchema), registerController)
 authRoute.post("/login", validate(loginSchema), loginController)
-
 authRoute.post("logout", authenticate, logoutController);
 //authRoute.get
 

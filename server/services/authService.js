@@ -1,9 +1,9 @@
-  import supabase from "../config/supabase.js"
+  import { supabase, adminSupabase } from "../config/supabase.js"
 
   export const registerService = async (registerData) => {  
     const { username, email, password } = registerData;
     try {
-      const { data, error} = await supabase.auth.signUp({
+      const { data, error} = await adminSupabase.auth.signUp({
         email,
         password,
         options: {
@@ -33,20 +33,20 @@
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
 
       if (!isEmail) {
-        const { data: user, error: userError } = await supabase
+        const { data: user, error: userError } = await adminSupabase
           .from("users")
           .select("email, username")
           .eq("username", identifier)
           .single()
 
         if (userError) {
-          throw new Error("User not found", userError.message)
+          throw new Error("Email not found", userError.message)
         }
 
         email = user.email;
       }
 
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await adminSupabase.auth.signInWithPassword({
         email,
         password
       });
@@ -58,13 +58,14 @@
       return data;
 
     } catch (error) {
+      console.log("CATCH ERROR: ", error.message)
       throw new Error(error.message);
-    } 
+    }
   }
 
   export const loginOAuthService = async () => {
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await adminSupabase.auth.signInWithOAuth({
         provider: 'google'
       })
 
@@ -72,7 +73,7 @@
         throw new Error(error.message);
       }
 
-      const { data: profile, error: profileError } = await supabase
+      const { data: profile, error: profileError } = await adminSupabase
         .from("users")
         .select('role')
         .eq('id', data.user.id)

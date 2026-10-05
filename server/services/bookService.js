@@ -1,4 +1,4 @@
-import supabase from "../config/supabase.js"
+import { supabase } from "../config/supabase.js"
 import { getBookById, getBookIdsByTag, getBookRankings, getBooksWithTag } from "../repository/book.js";
 
 export const fetchBook = async ({ tags, limit = 10, status = "published", page = 0 } = {}) => {

@@ -14,17 +14,24 @@ function Navbar() {
     handleRegister
   } = useAuth();
 
-  const [ darkMode, setDarkMode ] = useState(false);
-  const [ isLoginOpen, setIsLoginOpen ] = useState(false);
-  const [ isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [ isDark, setIsDark ] = useState(
+    document.documentElement.classList.contains("dark")
+  );
+  const [ activeModal, setActiveModal ] = useState(null);
 
-  const handleSwitch = (modal) => {
-    setIsLoginOpen(modal === 'login');
-    setIsRegisterOpen(modal === 'register');
-  }
+  const toggleTheme = () => {
+    const dark = document.documentElement.classList.toggle("dark")
+    setIsDark(dark);
+    try {
+      localStorage.setItem("theme", dark ? "dark" : "light")
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  } 
+
   return (
     <>
-    <nav className="border-b border-zinc-700">
+    <nav className="border-b border-zinc-200 dark:border-zinc-700">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
 
         {/* LEFT SIDE */}
@@ -55,24 +62,28 @@ function Navbar() {
           <BsCollection/> Series
         </Link>
       </div>
-        
-      
 
       <div className="flex gap-3 items-center text-white">
-        <input 
+        <input
           type="search" 
-          className="bg-zinc-800 rounded-lg placeholder: px-3 py-2.5 w-72"
+          className="bg-zinc-100 text-zinc-900 placeholder:text-zinc-500
+             border border-zinc-300 rounded-lg px-3 py-2.5 w-72
+             focus:outline-none focus:ring-2 focus:ring-red-500
+             dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400
+             dark:border-zinc-700"
           placeholder="Search..."
         />
         <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="bg-zinc-800 px-3.5 py-3.5 rounded cursor-pointer"
+          onClick={() => toggleTheme()}
+          className="bg-zinc-100 text-zinc-700 border border-zinc-300 hover:bg-zinc-200
+             px-3.5 py-3.5 rounded cursor-pointer
+             dark:bg-zinc-800 dark:text-zinc-200 dark:border-zinc-700 dark:hover:bg-zinc-700"
         >
-          {darkMode ? <BsSun/> : <RiMoonLine/>}
+          {isDark ? <BsSun/> : <RiMoonLine/>}
         </button>
 
         <button
-          onClick={() => setIsLoginOpen(true)}
+          onClick={() => setActiveModal('login')}
           className="bg-red-500 px-6 py-2.5 rounded cursor-pointer"
         >
           Login
@@ -81,18 +92,26 @@ function Navbar() {
       </div>
       
     </nav>  
-        {isLoginOpen && (
+        {activeModal === "login" && (
         <LoginModal
-          onClose={() => setIsLoginOpen(false)}
-          onSwitchToRegister={() => handleSwitch('register')}
-          onLogin={handleLogin}
+          onClose={() => setActiveModal(null)}
+          onSwitchToRegister={() => setActiveModal('register')}
+          onLogin={async (data) => {
+            const result = await handleLogin(data);
+            if (result?.success !== false) setActiveModal(null);
+          } 
+        }
         />
       )}
-      {isRegisterOpen && (
+      {activeModal === "register" && (
         <RegisterModal
-          onClose={() => setIsRegisterOpen(false)}
-          onSwitchToLogin={() => handleSwitch('login')}
-          onRegister={handleRegister}
+          onClose={() => setActiveModal(null)}
+          onSwitchToLogin={() => setActiveModal('login')}
+          onRegister={async (data) => {
+            const result = await handleRegister(data);
+            if (result?.success !== false) setActiveModal('login')
+          }
+        }
         />
       )}
     </>
