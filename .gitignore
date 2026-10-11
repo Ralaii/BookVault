@@ -24,3 +24,17 @@ dist-ssr
 *.sw?
 *.env
 .env*
+
+# Editor/tool-specific local config
+.agents/
+.claude/
+.cursor/
+.devin/
+.postman/
+
+# POSTMAN
+**/postman
+
+
+# Test coverage
+coverage/

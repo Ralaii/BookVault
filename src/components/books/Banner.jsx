@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import useBook from "../../hooks/Book/useBook";
+import useBanner from "../../hooks/Book/useBanner";
 import BannerSkeleton from "../skeletons/BannerSkeleton";
 
 function Banner() {
@@ -8,7 +8,7 @@ function Banner() {
     banners, 
     bannerLoading, 
     bannerError 
-  } =  useBook();
+  } =  useBanner();
 
   useEffect(() => {
     setCurrent(0);
@@ -23,7 +23,6 @@ function Banner() {
 
     return () => clearInterval(interval)
   }, [banners])
-
   if (bannerLoading) return <BannerSkeleton/>
   if (bannerError) return <div className="flex justify-center mx-auto">Something went wrong!</div>
   if (!banners?.length) return null
@@ -38,18 +37,26 @@ function Banner() {
       <div className="flex-1 opacity-50 scale-90 cursor-pointer transition-all duration-300"
         onClick={() => setCurrent(prev)}
       >
-        <img src={banners[prev]?.books?.cover_image} 
+        <img src={banners[prev]?.cover_image} 
           className="w-full h-64 rounded-lg object-cover"
           loading="lazy"
         />
       </div>
 
+      <div className="flex-1 items-center gap-">
+
+      </div>
+
       {/* CENTER BANNER */}
       <div className="group flex-2 transition-all cursor-pointer relative duration-300">
-        <img src={banners[current]?.books?.cover_image} 
+        <img src={banners[current]?.cover_image} 
           className="w-full h-80 rounded-lg object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
+        <span className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 text-sm rounded-lg">
+          {banners[current]?.title}
+        </span>
+
         <span className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
           {current + 1}/{banners.length}
         </span>
@@ -58,7 +65,7 @@ function Banner() {
       {/* RIGHT BANNER */}
       <div className="flex-1 opacity-50 scale-90 cursor-pointer transition-all duration-300"
         onClick={() => setCurrent(next)}>
-        <img src={banners[next]?.books?.cover_image} 
+        <img src={banners[next]?.cover_image} 
           className="w-full h-64 rounded-lg object-cover" 
           loading="lazy"
           width={500} 

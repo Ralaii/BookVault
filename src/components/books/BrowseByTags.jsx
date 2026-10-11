@@ -1,4 +1,4 @@
-import useBook from "../../hooks/Book/useBook";
+import useTags from "../../hooks/Book/useTags";
 import BrowseByTagsSkeleton from "../skeletons/BrowseByTagsSkeleton";
 
 function BrowseByTags({ selectedTag, onSelectTag }) {
@@ -6,7 +6,7 @@ function BrowseByTags({ selectedTag, onSelectTag }) {
     tags,
     tagsLoading,
     tagsError
-  } = useBook();
+  } = useTags();
   if (tagsLoading) return <BrowseByTagsSkeleton/>
   if (tagsError) return <div 
       className="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300"

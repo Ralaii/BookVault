@@ -10,7 +10,7 @@ function BookCard({book}) {
         />
       </div>
       
-      <div className="my-auto">
+      <div className="">
         <p>{book?.title}</p>
         {book.tags?.map((tag, index) => (
           <span 

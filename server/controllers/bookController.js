@@ -1,14 +1,12 @@
 import { bookPageService, fetchBanner, fetchBook, fetchBookRankings, fetchNewRelease, fetchTags } from "../services/bookService.js"
-import { withCache } from "../utilities/cache.js";
+import { withCache } from "../utils/cache.js";
 
 export const getBookController = async (req, res) => {
   try {
-    const page = parseInt(req.query.page);
-    const tags = req.query.tag;
-    const book = await withCache(`books_${page}`, 60 * 60, () => fetchBook({page, tags}))
+    const data = await fetchBook();
     res.status(200).json({
       success: true,
-      book
+      book: data
     });
   } catch (error) {
     res.status(500).json({
@@ -20,10 +18,10 @@ export const getBookController = async (req, res) => {
 
 export const bookBannerController = async (req, res) => {
   try {
-    const bookBanner = await withCache('banners', 60 * 60, fetchBanner)
+    const banner = await fetchBanner();
     res.status(200).json({
       success: true,
-      bookBanner
+      banner
     })
   } catch (error) {
     res.status(500).json({
@@ -35,14 +33,14 @@ export const bookBannerController = async (req, res) => {
 
 export const bookTagController = async (req, res) => {
   try {
-    const bookTag = await withCache('tags', 60 * 60, fetchTags);
+    const bookTag = await fetchTags();
     res.status(200).json({
       success: true,
       bookTag
     });
   } catch (error) {
     res.status(500).json({
-      success: true,
+      success: false,
       message: error.message
     })
   }

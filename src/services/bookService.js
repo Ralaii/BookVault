@@ -1,7 +1,6 @@
 import api from "../utilities/api";
 
-export const fetchBanner = async () => (await api.get('/api/books/banners')).bookBanner
-
+export const fetchBanner = async () => (await api.get('/api/books/banners')).banner;
 
 export const fetchTag = async () => (await api.get('/api/books/tags')).bookTag
 
@@ -9,7 +8,4 @@ export const fetchBook = async ({page, tags}) => (await api.get('/api/books/', {
 
 export const fetchNewBook = async () => (await api.get('/api/books/new')).newBooks
 
-export const fetchBookPage = async (id) => {
-  const res = await api.get(`/api/books/${id}`)
-  return res
-}
+export const fetchBookPage = async (id) => (await api.get(`/api/books/:id`)).bookPage

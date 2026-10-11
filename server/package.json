@@ -5,7 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "dev:local": "cross-env APP_ENV=local node --watch server.js",
+    "dev:prod": "cross-env APP_ENV=prod node --watch server.js",
+    "db:introspect": "node --env-file=.env.local ./node_modules/.bin/drizzle-kit introspect",
+    "db:generate": "node --env-file=.env.local ./node_modules/.bin/drizzle-kit generate",
+    "db:migrate": "node --env-file=.env.local ./node_modules/.bin/drizzle-kit migrate",
+    "db:studio": "node --env-file=.env.local ./node_modules/.bin/drizzle-kit studio"
   },
   "keywords": [],
   "author": "",
@@ -14,12 +20,24 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",
     "@upstash/redis": "^1.38.4",
+    "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.4",
     "express": "^5.2.1",
+    "helmet": "^8.3.0",
     "ioredis": "^6.0.0",
     "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.1",
     "zod": "^4.6.1"
+  },
+  "allowScripts": {
+    "bcrypt@6.0.0": true
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.11",
+    "supabase": "^2.120.0"
   }
 }

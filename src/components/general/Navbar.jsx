@@ -84,7 +84,8 @@ function Navbar() {
 
         <button
           onClick={() => setActiveModal('login')}
-          className="bg-red-500 px-6 py-2.5 rounded cursor-pointer"
+          className="bg-zinc-100 text-zinc-700 border border-zinc-300 hover:bg-zinc-200
+             px-3.5 py-2.5 rounded cursor-pointer dark:bg-red-500 dark:text-white dark:border-red-500 dark:hover:bg-red-600"
         >
           Login
         </button>

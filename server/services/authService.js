@@ -1,9 +1,9 @@
-  import { supabase, adminSupabase } from "../config/supabase.js"
+  import { supabase, adminSupabase, createAuthClient } from "../config/supabase.js"
 
   export const registerService = async (registerData) => {  
     const { username, email, password } = registerData;
     try {
-      const { data, error} = await adminSupabase.auth.signUp({
+      const { data, error} = await createAuthClient().auth.signUp({
         email,
         password,
         options: {
@@ -20,7 +20,7 @@
     return data;
 
     } catch (error) {
-      throw new Error("Server Error RegisterService.", error.message);
+      throw new AppError(error.message, 400);
     }
   }
 
@@ -40,13 +40,13 @@
           .single()
 
         if (userError) {
-          throw new Error("Email not found", userError.message)
+          throw new Error("Invalid credentials", userError.message)
         }
 
         email = user.email;
       }
 
-      const { data, error } = await adminSupabase.auth.signInWithPassword({
+      const { data, error } = await createAuthClient().auth.signInWithPassword({
         email,
         password
       });
@@ -58,14 +58,13 @@
       return data;
 
     } catch (error) {
-      console.log("CATCH ERROR: ", error.message)
       throw new Error(error.message);
     }
   }
 
   export const loginOAuthService = async () => {
     try {
-      const { data, error } = await adminSupabase.auth.signInWithOAuth({
+      const { data, error } = await createAuthClient().auth.signInWithOAuth({
         provider: 'google'
       })
 

@@ -3,6 +3,7 @@ import Banner from "../components/books/Banner";
 import BrowseByTags from "../components/books/BrowseByTags";
 import BookCatalogue from "../components/books/BookCatalogue";
 import NewReleaseCatalogue from "@/components/books/NewReleaseCatalogue";
+import FeaturedBanner from "@/components/books/FeaturedBanner";
 
 function Home() {
   const [ selectedTag, setSelectedTag ] = useState([]);
@@ -16,14 +17,13 @@ function Home() {
     <>
       <Banner/>
       <div className="max-w-7xl mx-auto px-4 py-8 w-full">
-        <BrowseByTags
+        {/* <BrowseByTags
         selectedTag = {selectedTag}
         onSelectTag = {handleSelectTag}
-        />
-        <BookCatalogue
-          selectedTag = {selectedTag}
-        />
-        <NewReleaseCatalogue/>
+        /> */}
+        <FeaturedBanner/>
+        
+        
       </div>
       
     </>
