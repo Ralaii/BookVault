@@ -9,7 +9,6 @@ function NewReleaseCatalogue({}) {
     newBookError
   } = useNewRelease();
 
-  console.log(newBook?.title);
   return(
     <section className="px-6 py-4 w-full">
       <div className="flex justify-between mb-4">

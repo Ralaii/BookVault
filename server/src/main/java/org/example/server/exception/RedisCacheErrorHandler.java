@@ -12,7 +12,7 @@ public class RedisCacheErrorHandler implements CacheErrorHandler {
         if (isConnectionProblem(e)) {
             log.warn("Redis unavailable, cache {} skipped [{}::{}]: {}", operation, cache.getName(), key, e.getMessage());
         } else {
-            log.error("Cache {} failed [{}::{}]: {}", operation, cache.getName(), key, e.getMessage());
+            log.error("Cache {} failed [{}::{}]", operation, cache.getName(), key, e);
         }
     }
 

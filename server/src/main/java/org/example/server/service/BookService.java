@@ -37,8 +37,8 @@ public class BookService {
                 ));
     }
 
+//    HELPER METHODS
     private List<String> getTags(List<String> names) {
-        //    HELPER METHODS
         int MAX_TAGS = 2;
         return names.stream().sorted().limit(MAX_TAGS).toList();
     }
@@ -57,7 +57,6 @@ public class BookService {
                 book.getCreatedAt()
         );
     }
-
 //    END OF HELPER METHODS
 
     @Transactional(readOnly = true)
