@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import Home from "./pages/Home";
-import BookDetailPage from "./pages/BookDetailPage";
 
 
 function App() {
@@ -9,18 +8,13 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        <Route element={ <MainLayout/> }>
-          <Route path="/" element={<Home/>}/>
-        </Route>
-
-        {/* <Route
-          path="/page/book/:id"
+        <Route
+          path="/"
           element={
-            <MainLayout>
-              <BookDetailPage/>
-            </MainLayout>
-          }
-        /> */}
+          <MainLayout>
+            <Home/>
+          </MainLayout>}
+        />
 
       </Routes>
     </BrowserRouter>
