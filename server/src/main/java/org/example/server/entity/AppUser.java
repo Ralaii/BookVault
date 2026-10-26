@@ -4,21 +4,20 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Check;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
-@Check(constraints = "role IN ('user', 'author', 'admin')")
+@Table(name = "users", check = @CheckConstraint(constraint = "role IN ('USER', 'ADMIN', 'AUTHOR')"))
 @Getter
 @Setter
 @NoArgsConstructor
 public class AppUser {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     @Column(nullable = false, unique = true)
@@ -27,7 +26,6 @@ public class AppUser {
     @Column(nullable = false, unique = true)
     private String username;
 
-    // Replaces Supabase auth.users: store a BCrypt hash here
     @Column(name = "password_hash")
     private String passwordHash;
 

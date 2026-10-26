@@ -1,4 +1,14 @@
 package org.example.server.repository;
 
-public interface UserRepository {
+import org.example.server.entity.AppUser;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface UserRepository extends JpaRepository<AppUser, UUID> {
+    Optional<AppUser> findUserByUsername(String username);
+
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 }

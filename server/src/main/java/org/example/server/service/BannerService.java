@@ -1,12 +1,14 @@
-package org.example.server.security;
+package org.example.server.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.server.dto.BannerResponse;
+import org.example.server.dto.Response.BannerResponse;
 import org.example.server.entity.Banner;
 import org.example.server.entity.Book;
 import org.example.server.entity.BookRanking;
+import org.example.server.entity.BookStatus;
 import org.example.server.repository.BannerRepository;
 import org.example.server.repository.BookRankingRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,17 +20,15 @@ public class BannerService {
     private final BannerRepository bannerRepository;
     private final BookRankingRepository bookRankingRepository;
 
-    @Transactional(readOnly = true)
-    public List<BannerResponse> getBanners() {
-        List<Banner> banners = bannerRepository.findByActiveTrueOrderByPositionAsc();
-
-        if (!banners.isEmpty()) {
-            return banners.stream().map(this::fromBanner).toList();
-        }
-
-        return bookRankingRepository.findTop10ByOrderByRankAsc().stream()
-                .map(this::fromRanking)
+//  HELPER METHODS
+    private List<String> extractTags(Book book) {
+        return book.getBookTags().stream()
+                .map(bt -> bt.getTag().getName())
                 .toList();
+    }
+
+    private String extractAuthor(Book book) {
+        return book.getAuthor().getAppUser().getUsername();
     }
 
     private BannerResponse fromBanner(Banner banner) {
@@ -37,7 +37,10 @@ public class BannerService {
           book.getId(),
           book.getTitle(),
           banner.getImageUrl(),
-          book.getCoverImage()
+          book.getCoverImage(),
+          extractTags(book),
+          extractAuthor(book),
+          book.getDescription()
         );
     }
 
@@ -47,7 +50,25 @@ public class BannerService {
           book.getId(),
           book.getTitle(),
           null,
-          book.getCoverImage()
+          book.getCoverImage(),
+          extractTags(book),
+          extractAuthor(book),
+          book.getDescription()
         );
+    }
+//    END OF HELPER METHODS
+
+    @Transactional(readOnly = true)
+    @Cacheable(value = "banner", key = "'home'")
+    public List<BannerResponse> getBanners() {
+        List<Banner> banners = bannerRepository.findByActiveTrueOrderByPositionAsc(BookStatus.PUBLISHED);
+
+        if (!banners.isEmpty()) {
+            return banners.stream().map(this::fromBanner).toList();
+        }
+
+        return bookRankingRepository.findTop10ByOrderByRankAsc(BookStatus.PUBLISHED).stream()
+                .map(this::fromRanking)
+                .toList();
     }
 }

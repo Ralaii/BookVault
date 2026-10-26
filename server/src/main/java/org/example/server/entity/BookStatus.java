@@ -1,6 +1,6 @@
 package org.example.server.entity;
 
-public enum Status {
+public enum BookStatus {
     PUBLISHED,
     DRAFT;
 }

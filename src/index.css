@@ -5,6 +5,13 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
 
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 @custom-variant dark (&:is(.dark *));
 
 @theme {

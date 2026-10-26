@@ -1,4 +1,4 @@
-package org.example.server.dto;
+package org.example.server.dto.Response;
 
 import org.example.server.entity.Role;
 

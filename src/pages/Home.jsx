@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Banner from "../components/books/Banner";
 import BrowseByTags from "../components/books/BrowseByTags";
-import BookCatalogue from "../components/books/BookCatalogue";
-import NewReleaseCatalogue from "@/components/books/NewReleaseCatalogue";
 import FeaturedBanner from "@/components/books/FeaturedBanner";
+import Banner from "@/components/books/Banner";
+import BookPopular from "../components/books/BookPopular";
+import NewReleaseCatalogue from "@/components/books/NewReleaseCatalogue";
 
 function Home() {
   const [ selectedTag, setSelectedTag ] = useState([]);
@@ -16,13 +16,11 @@ function Home() {
   return (
     <>
       <Banner/>
-      <div className="max-w-7xl mx-auto px-4 py-8 w-full">
-        {/* <BrowseByTags
-        selectedTag = {selectedTag}
-        onSelectTag = {handleSelectTag}
-        /> */}
+      {/* <FeaturedBanner/> */}
+      <div className="w-full max-w-7xl mx-auto px-4 py-2 space-y-10">
+        <BookPopular/>
         <FeaturedBanner/>
-        
+        <NewReleaseCatalogue/>        
         
       </div>
       

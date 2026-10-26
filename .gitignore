@@ -24,6 +24,9 @@ dist-ssr
 *.sw?
 *.env
 .env*
+server/src/main/resources/application-local.properties
+server/src/main/resources/application-prod.properties
+server/target/
 
 # Editor/tool-specific local config
 .agents/
@@ -32,9 +35,15 @@ dist-ssr
 .devin/
 .postman/
 
+# SUPABASE
+**/supabase
+
 # POSTMAN
 **/postman
 
 
 # Test coverage
 coverage/
+
+# Removing the Old Express Backend for now will be readding them after Springboot
+/Eserver 

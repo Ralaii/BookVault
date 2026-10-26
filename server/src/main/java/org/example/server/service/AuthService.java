@@ -1,39 +1,49 @@
-package org.example.server.security;
+package org.example.server.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.server.dto.LoginRequest;
-import org.example.server.dto.LoginResponse;
-import org.example.server.dto.RegisterRequest;
-import org.example.server.dto.RegisterResponse;
-import org.example.server.entity.User;
+import org.example.server.dto.Request.LoginRequest;
+import org.example.server.dto.Response.LoginResponse;
+import org.example.server.dto.Request.RegisterRequest;
+import org.example.server.dto.Request.RegisterResponse;
+import org.example.server.entity.AppUser;
+import org.example.server.exception.InvalidCredentialsException;
 import org.example.server.repository.UserRepository;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    public LoginResponse login(@Valid LoginRequest loginRequest) {
-        User user = userRepository.findUserByUsername(loginRequest.username())
-                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
-
-        if (!passwordEncoder.matches(loginRequest.password(), user.getPasswordHash())) {
-            throw new RuntimeException("Invalid username or password");
+    public LoginResponse login(LoginRequest loginRequest) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.username(),
+                            loginRequest.password()
+                    ));
+        } catch (AuthenticationException e) {
+            throw new InvalidCredentialsException(("Invalid username or password"));
         }
-        return new LoginResponse(user.getUsername(), user.getRole());
+        AppUser appUser = userRepository.findUserByUsername(loginRequest.username())
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid username or password"));
+        return new LoginResponse(appUser.getUsername(), appUser.getRole());
     }
 
-    public RegisterResponse register(@Valid RegisterRequest registerRequest) {
-        User user = new User();
-        user.setUsername(registerRequest.username());
-        user.setPasswordHash(passwordEncoder.encode(registerRequest.password()));
-        user.setRole("USER");
-        userRepository.save(user);
+    public RegisterResponse register(RegisterRequest registerRequest) {
+        AppUser appUser = new AppUser();
+        appUser.setUsername(registerRequest.username());
+        appUser.setPasswordHash(passwordEncoder.encode(registerRequest.password()));
+        appUser.setEmail(registerRequest.email());
+        userRepository.save(appUser);
 
-        return new RegisterResponse(user.getUsername());
+        return new RegisterResponse(appUser.getUsername());
     }
 }

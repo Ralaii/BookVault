@@ -1,16 +1,17 @@
 function BookCard({book}) {
   return (
     <div className="flex gap-3 cursor-pointer group">
-      <div className="aspect-[3/4] w-30 shrink-0 overflow-hidden rounded-lg">
+      <div className="aspect-[3/4] w-30 shrink-0 overflow-hidden rounded-lg relative">
         <img 
           src={book?.cover_image} 
           alt={book?.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
+        <h3 className="absolute right-2 bottom-2 text-white bg-black/50 px-2 rounded">{book.rank}</h3>
       </div>
       
-      <div className="">
+      <div className="flex-col my-auto">
         <p>{book?.title}</p>
         {book.tags?.map((tag, index) => (
           <span 
@@ -20,6 +21,7 @@ function BookCard({book}) {
             {index > 0 && <span> • </span>}{tag}
           </span>
         ))}
+      
       </div>
     </div>
   )

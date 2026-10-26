@@ -3,8 +3,8 @@ import { fetchNewBook } from "../../services/bookService";
 
 function useNewRelease() {
   const { data: newBook, isLoading: newBookLoading, isError: newBookError } = useQuery({
-    queryKey: ['newBook', {page }],
-    queryFn: () => fetchNewBook({ page})
+    queryKey: ['newBook'],
+    queryFn: () => fetchNewBook()
   });
   
   return {
@@ -13,3 +13,5 @@ function useNewRelease() {
     newBookError
   }
 }
+
+export default useNewRelease;

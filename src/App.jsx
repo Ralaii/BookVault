@@ -9,22 +9,18 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        <Route
-          path="/"
-          element={
-          <MainLayout>
-            <Home/>
-          </MainLayout>}
-        />
+        <Route element={ <MainLayout/> }>
+          <Route path="/" element={<Home/>}/>
+        </Route>
 
-        <Route
+        {/* <Route
           path="/page/book/:id"
           element={
             <MainLayout>
               <BookDetailPage/>
             </MainLayout>
           }
-        />
+        /> */}
 
       </Routes>
     </BrowserRouter>
