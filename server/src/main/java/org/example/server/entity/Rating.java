@@ -11,8 +11,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ratings")
-@Check(constraints = "stars >= 1 AND stars <= 5")
+@Table(name = "ratings", check = @CheckConstraint( constraint = "stars >= 1 AND stars <= 5"))
 @Getter
 @Setter
 @NoArgsConstructor
