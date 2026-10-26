@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom"
-import { loginSchema, registerSchema } from "../../validation/validation"
 import useAuthStore from "../../store/authStore";
 import { loginService, registerService } from "../../services/authService";
 import { toast } from 'sonner';
@@ -12,13 +11,13 @@ function useAuth() {
   const handleLogin = async (formData) => {
     try {
       const data = await loginService(formData);
-
       setRole(data.user.role)
       toast.success(`Welcome Back! ${data.user.username}!`)
       navigate('/');
       
     } catch (error) {
       toast.error(error.message);
+      return { success: false }
     }
   }
 
@@ -36,6 +35,7 @@ function useAuth() {
       navigate('/')
     } catch (error) {
       toast.error(error.message)
+      return { success: false }
     }
   }
   

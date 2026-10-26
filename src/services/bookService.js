@@ -1,21 +1,21 @@
 import api from "../utilities/api";
 
-export const fetchBanner = async () => {
-  const res = await api.get('/api/books/banners')
-  return res.data.bookBanner
-}
+// export const fetchBanner = async () => (await api.get('/api/books/banners')).banners;
 
-export const fetchTag = async () => {
-  const res = await api.get('/api/books/tags')
-  return res.data.bookTag
-}
+export const fetchBanner = async () => (await api.get("/api/books/banners"));
 
-export const fetchBook = async ({page, tags}) => {
-  const res = await api.get('/api/books/books', { params: {page, tags}});
-  return res.data.book
-}
 
+export const fetchTag = async () => (await api.get('/api/books/tags')).bookTag
+
+export const fetchPopularBook = async () => (await api.get('/api/books/popular'));
+
+
+
+// export const fetchNewBook = async () => (await api.get('/api/books/new'))
 export const fetchNewBook = async () => {
-  const res = await api.get('/api/books/new')
-  return res.data.newBooks;
+  const book = await api.get('api/books/new')
+  console.log("SERVICE", book);
+  return book;
 }
+
+export const fetchBookPage = async (id) => (await api.get(`/api/books/:id`)).bookPage

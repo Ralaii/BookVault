@@ -1,100 +1,61 @@
 import { useState } from "react";
-import { BiLibrary } from "react-icons/bi";
-import { BsCollection, BsCompass, BsGrid, BsMoon, BsSearch, BsSun } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { BsList, BsX } from "react-icons/bs";
 import logo from "../../assets/imgs/BookVaultLogo.jpg";
-import { RiMoonLine } from "react-icons/ri";
-import LoginModal from "../auth/LoginModal";
-import RegisterModal from "../auth/RegisterModal";
-import useAuth from "../../hooks/auth/useAuth";
+import useTheme from "../../hooks/useTheme";
+import SearchInput from "./SearchInput";
+import MobileMenu from "./nav/NavMobileMenu";
+import AuthModals from "./nav/AuthModal";
+import ThemeToggle from "./nav/navToggle";
+import NavLinks from "./nav/NavLinks";
 
 function Navbar() {
-  const {
-    handleLogin,
-    handleRegister
-  } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeModal, setActiveModal] = useState(null);
 
-  const [ darkMode, setDarkMode ] = useState(false);
-  const [ isLoginOpen, setIsLoginOpen ] = useState(false);
-  const [ isRegisterOpen, setIsRegisterOpen] = useState(false);
-
-  const handleSwitch = (modal) => {
-    setIsLoginOpen(modal === 'login');
-    setIsRegisterOpen(modal === 'register');
-  }
   return (
     <>
-    <nav className="border-b border-zinc-700">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
+      <nav className="border-b border-zinc-200 dark:border-zinc-700">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-6">
 
-        {/* LEFT SIDE */}
-        <div className="flex items-center gap-6 font-sans font-semibold">
-          <Link to="/" className="flex items-center gap-1.5">
-          <img src={logo} alt="BookVault" className="h-8"/>
-          <h2 className="text-2xl font-sans">BookVault</h2>
-        </Link>
+          {/* LEFT: hamburger (mobile) + logo + links (tablet/desktop) */}
+          <div className="flex items-center gap-3 font-sans font-semibold md:gap-5 lg:gap-6">
+            <button
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-label="Toggle menu"
+              className="text-2xl cursor-pointer md:hidden"
+            >
+              {menuOpen ? <BsX /> : <BsList />}
+            </button>
 
-        <Link 
-          to="/" 
-          className="flex items-center gap-1"
-        >
-          <BsCompass/> Browse
-        </Link>
+            <Link to="/" className="flex items-center gap-1.5">
+              <img src={logo} alt="BookVault" className="h-8" />
+              <h2 className="text-2xl font-sans">BookVault</h2>
+            </Link>
 
-        <Link 
-          to="/" 
-          className="flex items-center gap-1"
-        >
-          <BiLibrary/> Library
-        </Link>
+            <NavLinks/>
+          </div>
 
-        <Link
-          to="/"
-          className="flex items-center gap-1"
-        >
-          <BsCollection/> Series
-        </Link>
-      </div>
-        
-      
-
-      <div className="flex gap-3 items-center text-white">
-        <input 
-          type="search" 
-          className="bg-zinc-800 rounded-lg placeholder: px-3 py-2.5 w-72"
-          placeholder="Search..."
-        />
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="bg-zinc-800 px-3.5 py-3.5 rounded cursor-pointer"
-        >
-          {darkMode ? <BsSun/> : <RiMoonLine/>}
-        </button>
-
-        <button
-          onClick={() => setIsLoginOpen(true)}
-          className="bg-red-500 px-6 py-2.5 rounded cursor-pointer"
-        >
-          Login
-        </button>
+          {/* RIGHT: search (tablet/desktop) + theme + login */}
+          <div className="flex items-center gap-3">
+            <SearchInput className="hidden md:block md:w-44 lg:w-72" />
+            <ThemeToggle isDark={isDark} onToggle={toggleTheme}/>
+            <button
+              onClick={() => setActiveModal("login")}
+              className="bg-white text-zinc-700 border border-zinc-300 hover:bg-zinc-200
+                px-3.5 py-2.5 rounded cursor-pointer
+                dark:bg-red-500 dark:text-white dark:border-red-500 dark:hover:bg-red-600"
+            >
+              Login
+            </button>
+          </div>
         </div>
-      </div>
-      
-    </nav>  
-        {isLoginOpen && (
-        <LoginModal
-          onClose={() => setIsLoginOpen(false)}
-          onSwitchToRegister={() => handleSwitch('register')}
-          onLogin={handleLogin}
-        />
-      )}
-      {isRegisterOpen && (
-        <RegisterModal
-          onClose={() => setIsRegisterOpen(false)}
-          onSwitchToLogin={() => handleSwitch('login')}
-          onRegister={handleRegister}
-        />
-      )}
+
+        <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+      </nav>
+
+      <AuthModals activeModal={activeModal} setActiveModal={setActiveModal} />
     </>
   );
 }
