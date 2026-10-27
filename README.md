@@ -1,10 +1,10 @@
-##BookVault
+## BookVault
 This application is a passion project as this is one of my hobbies (Made it for fun).
 
-##Disclaimer
+## Disclaimer
 This project/application is created as a passion project, and for my learning journey only. It is not intended for commercial use. All features and functionalities are experimental and built for practice. Currently, this project/application is still unfinished as I'm currently occupied on my studies.
 
-##Technologies Used
+## Technologies Used
 ** Frontend **
 -- React
 -- Tailwind CSS
@@ -27,9 +27,8 @@ This project/application is created as a passion project, and for my learning jo
 -- Docker
 -- IntelliJ IDEA
 
-##Setup
+## Setup
 1. Clone Repository
-
 2. Start the database using the Supabase CLI (from the project root) or use a hosted Supabase Project
 3. (Optional) Start Redis via Docker
 4. Add environmental variables
