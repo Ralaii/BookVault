@@ -8,7 +8,6 @@ import org.example.server.entity.BookRanking;
 import org.example.server.entity.BookStatus;
 import org.example.server.repository.BannerRepository;
 import org.example.server.repository.BookRankingRepository;
-import org.example.server.repository.BookTagRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,6 @@ public class BannerService {
 
     private final BannerRepository bannerRepository;
     private final BookRankingRepository bookRankingRepository;
-    private final BookTagRepository bookTagRepository;
     private final BookTagHelper bookTagHelper;
 
     private String extractAuthor(Book book) {

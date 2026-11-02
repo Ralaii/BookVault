@@ -9,10 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface BookRepository extends JpaRepository<Book, UUID> {
-    @EntityGraph(attributePaths = {
-            "bookTags", "bookTags.tag"
-    })
-    List<Book> findTop5ByOrderByCreatedAtDesc(BookStatus status);
+    List<Book> findTop6ByStatusOrderByCreatedAtDesc(BookStatus status);
 
 //    @EntityGraph(attributePaths = {"chapters",
 //        "bookTags", "bookTags.tag"

@@ -1,10 +1,15 @@
 import useBanner from "@/hooks/Book/useBanner";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import BannerSkeleton from "../skeletons/BannerSkeleton";
 
 function Banner() {
   const [current, setCurrent] = useState(0);
-  const { banners } = useBanner();
+  const { 
+    banners,
+    bannerLoading,
+    bannerError
+  } = useBanner();
 
   useEffect(() => {
     setCurrent(0);
@@ -20,11 +25,15 @@ function Banner() {
     return () => clearInterval(interval);
   }, [current, banners]);
 
+  
+
+  if (bannerLoading) return <BannerSkeleton />;
+  if (bannerError) return <div>Please try again...</div>
+
   if (!banners?.length) return null;
 
   const prev = (current - 1 + banners.length) % banners.length;
   const next = (current + 1) % banners.length;
-
   return (
     <section 
       className="flex items-center justify-center mt-5 gap-5 w-full overflow-x-clip py-4"

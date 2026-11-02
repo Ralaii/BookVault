@@ -1,6 +1,6 @@
 import { Skeleton } from "../ui/skeleton";
 
-function BannerCatalogueSkeleton() {
+function BookPopularSkeleton() {
   return (
     <section className="px-6 py-4">
         <Skeleton className="h-4 w-32 mb-4"/>
@@ -33,4 +33,4 @@ function BannerCatalogueSkeleton() {
   );
 }
 
-export default BannerCatalogueSkeleton;
+export default BookPopularSkeleton;

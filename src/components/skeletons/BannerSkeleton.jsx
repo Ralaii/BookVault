@@ -1,22 +1,16 @@
+import { Skeleton } from "@/components/ui/skeleton";
+
 function BannerSkeleton() {
   return (
-    <section className="flex items-center gap-4 w-full px-6 py-4">
-      
+    <section className="flex items-center justify-center mt-5 gap-5 w-full overflow-x-clip py-4">
       {/* LEFT */}
-      <div className="flex-1 opacity-50 scale-90">
-        <div className="w-full h-64 rounded-lg bg-zinc-700 animate-pulse" />
-      </div>
+      <Skeleton className="shrink-0 w-[85%] md:w-[40%] aspect-[17/10] scale-95 opacity-50 rounded-xl hidden sm:block" />
 
       {/* CENTER */}
-      <div className="flex-2">
-        <div className="w-full h-80 rounded-lg bg-zinc-700 animate-pulse" />
-      </div>
+      <Skeleton className="shrink-0 w-[85%] md:w-[40%] aspect-[17/10] rounded-xl" />
 
       {/* RIGHT */}
-      <div className="flex-1 opacity-50 scale-90">
-        <div className="w-full h-64 rounded-lg bg-zinc-700 animate-pulse" />
-      </div>
-
+      <Skeleton className="shrink-0 w-[85%] md:w-[40%] aspect-[17/10] scale-95 opacity-50 rounded-xl hidden sm:block" />
     </section>
   );
 }

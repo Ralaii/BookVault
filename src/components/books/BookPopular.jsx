@@ -2,7 +2,7 @@ import { useState } from "react";
 import useBook from "../../hooks/Book/useBook";
 import BookCard from "./BookCard";
 import { Link } from "react-router-dom";
-import BannerCatalogueSkeleton from "../skeletons/BannerCatalogueSkeleton";
+import BookPopularSkeleton from "../skeletons/BookPopularSkeleton";
 import { BsArrowLeftSquareFill, BsArrowRight } from "react-icons/bs";
 
 function BookPopular() {
@@ -11,7 +11,7 @@ function BookPopular() {
     booksLoading,
     booksError
   } = useBook()
-  if (booksLoading) return <BannerCatalogueSkeleton/>
+  if (booksLoading) return <BookPopularSkeleton/>
   if (booksError) return <div>Something went wrong...</div>
 
   return(

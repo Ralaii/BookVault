@@ -6,9 +6,7 @@ import org.example.server.dto.Response.Ranked200BookResponse;
 import org.example.server.entity.Book;
 import org.example.server.entity.BookRanking;
 import org.example.server.entity.BookStatus;
-import org.example.server.entity.BookTag;
 import org.example.server.repository.BookRankingRepository;
-import org.example.server.repository.BookTagRepository;
 import org.example.server.repository.ChapterRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -19,7 +17,6 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class BookRankingService {
-    private final BookTagRepository bookTagRepository;
     private final BookRankingRepository bookRankingRepository;
     private final ChapterRepository chapterRepository;
     private final BookTagHelper bookTagHelper;

@@ -1,6 +1,7 @@
 import useBanner from "@/hooks/Book/useBanner";
 import FeaturedBannerCard from "./FeaturedBannerCard";
 import { useEffect, useRef } from "react";
+import FeaturedBannerSkeleton from "../skeletons/FeaturedBannerSkeleton";
 
 function FeaturedBanner() {
   const { 
@@ -26,7 +27,7 @@ function FeaturedBanner() {
     })
   }, [active, banners])
 
-  if (bannerLoading) return <div>Loading...</div>
+  if (bannerLoading) return <FeaturedBannerSkeleton/>
   if (bannerError) return <div>Something went wrong...</div>
   return(
     <section className="flex flex-col gap-4 w-full px-6 py-4 max-w-7xl mx-auto">

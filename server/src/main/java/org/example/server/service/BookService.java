@@ -45,7 +45,7 @@ public class BookService {
 
     private List<Book> findNewBooks() {
         return bookRepository
-                .findTop5ByOrderByCreatedAtDesc(BookStatus.PUBLISHED);
+                .findTop6ByStatusOrderByCreatedAtDesc(BookStatus.PUBLISHED);
     }
 
     private NewBookResponse toNewBookResponse(Book book, Map<UUID, List<String>> tags) {
@@ -62,7 +62,9 @@ public class BookService {
     @Transactional(readOnly = true)
     @Cacheable(value = "book", key = "'new'")
     public List<NewBookResponse> getNewBooks() {
-        List<Book> books = bookRepository.findTop5ByOrderByCreatedAtDesc(BookStatus.PUBLISHED);
+        List<Book> books = bookRepository
+                .findTop6ByStatusOrderByCreatedAtDesc(BookStatus.PUBLISHED);
+
         Map<UUID, List<String>> tags = getTagsByBookId(books);
         return findNewBooks().stream()
                 .map(br -> toNewBookResponse(br, tags))
